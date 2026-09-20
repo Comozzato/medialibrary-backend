@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.wille.template.dto.request.LoginRequest;
 import com.wille.template.security.JwtTokenService;
 
 @RestController 
@@ -13,7 +14,7 @@ public class AuthController {
     private JwtTokenService jwtTokenService;
 
     @PostMapping("/auth/login")
-   public String login(@RequestBody LoginRequest loginRequest) {
+    public String login(@RequestBody LoginRequest loginRequest) {
       // Lógica para validar o usuário (no exemplo, apenas um nome de usuário simples)
       if ("user".equals(loginRequest.getUsername()) && "password".equals(loginRequest.getPassword())) {
           return jwtTokenService.generateToken(loginRequest.getUsername());
@@ -21,18 +22,5 @@ public class AuthController {
       throw new RuntimeException("Credenciais inválidas");
     }
 
-
-    public class LoginRequest {
-        private String username;
-        private String password;
-
-        public String getUsername() {
-            return username;
-        }
-
-        public String getPassword() {
-            return password;
-        }
-    }
 }
 

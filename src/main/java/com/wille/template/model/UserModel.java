@@ -1,14 +1,15 @@
-package com.wille.template.Entity;
+package com.wille.template.model;
 
-public class UserEntity {
+public class UserModel {
     private Long id;
     private String username;
     private String password;
+    private String email;
 
-    public UserEntity() {
+    public UserModel() {
     }
 
-    public UserEntity(Long id, String username, String password) {
+    public UserModel(Long id, String username, String password) {
         this.id = id;
         this.username = username;
         this.password = password;
@@ -36,5 +37,13 @@ public class UserEntity {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 }
