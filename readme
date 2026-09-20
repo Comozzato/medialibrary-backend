@@ -1,0 +1,343 @@
+# Spring Boot API Template
+
+A reusable template for building REST APIs with Spring Boot, Java, PostgreSQL, JPA, Flyway and Docker.
+
+The project provides a basic structure for starting new backend applications without having to configure the same infrastructure from scratch.
+
+## Stack
+
+* Java 25
+* Spring Boot 4.1.1
+* Maven
+* Spring Web MVC
+* Spring Data JPA
+* Bean Validation
+* PostgreSQL
+* Flyway
+* Lombok
+* Spring Boot Actuator
+* Spring Boot DevTools
+* Docker
+* Docker Compose
+
+## Project Structure
+
+```text
+src/
+└── main/
+    ├── java/
+    │   └── com/wille/template/
+    │       ├── config/
+    │       ├── controller/
+    │       ├── dto/
+    │       │   ├── request/
+    │       │   └── response/
+    │       ├── exception/
+    │       ├── model/
+    │       ├── repository/
+    │       └── service/
+    │
+    └── resources/
+        ├── db/
+        │   └── migration/
+        └── application.yml
+```
+
+### Main packages
+
+| Package      | Responsibility                                  |
+| ------------ | ----------------------------------------------- |
+| `config`     | Application and infrastructure configuration    |
+| `controller` | REST API endpoints                              |
+| `dto`        | Data Transfer Objects                           |
+| `exception`  | Custom exceptions and global exception handling |
+| `model`      | JPA entities                                    |
+| `repository` | Data access                                     |
+| `service`    | Business logic                                  |
+
+## Requirements
+
+If running locally:
+
+* Java 25
+* Maven
+* PostgreSQL
+
+Or use Docker, which provides the application and PostgreSQL database.
+
+## Configuration
+
+The application uses environment variables for database and server configuration.
+
+Create a `.env` file based on `.env.example`:
+
+```env
+DB_URL=jdbc:postgresql://db:5432/app
+DB_USERNAME=postgres
+DB_PASSWORD=postgres
+SERVER_PORT=8080
+```
+
+The default values configured in `application.yml` allow the application to run locally as well:
+
+```yaml
+spring:
+  datasource:
+    url: ${DB_URL:jdbc:postgresql://localhost:5432/app}
+    username: ${DB_USERNAME:postgres}
+    password: ${DB_PASSWORD:postgres}
+```
+
+## Running with Docker
+
+Build and start the application:
+
+```bash
+docker compose up --build
+```
+
+The API will be available at:
+
+```text
+http://localhost:8080
+```
+
+To run in the background:
+
+```bash
+docker compose up -d --build
+```
+
+To stop the containers:
+
+```bash
+docker compose down
+```
+
+To stop the containers and remove the PostgreSQL volume:
+
+```bash
+docker compose down -v
+```
+
+> `docker compose down -v` removes the database data stored in the Docker volume.
+
+## Database
+
+The default Docker configuration creates a PostgreSQL database with:
+
+```text
+Database: app
+User: postgres
+Password: postgres
+Host: db
+Port: 5432
+```
+
+The PostgreSQL service is available from the host at:
+
+```text
+localhost:5432
+```
+
+Inside the Docker network, the application connects using:
+
+```text
+db:5432
+```
+
+## Database Migrations
+
+Database schema changes are managed with Flyway.
+
+Migrations are located at:
+
+```text
+src/main/resources/db/migration/
+```
+
+Flyway migrations follow the naming convention:
+
+```text
+V<version>__<description>.sql
+```
+
+For example:
+
+```text
+V1__create_users_table.sql
+V2__create_products_table.sql
+V3__add_email_to_users.sql
+```
+
+A migration should contain the SQL required to make one schema change.
+
+Example:
+
+```sql
+CREATE TABLE users (
+    id BIGSERIAL PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    email VARCHAR(255) NOT NULL UNIQUE,
+    created_at TIMESTAMP NOT NULL
+);
+```
+
+Once a migration has been executed, **do not modify it**. Create a new migration for subsequent changes.
+
+The application uses:
+
+```yaml
+spring:
+  jpa:
+    hibernate:
+      ddl-auto: validate
+```
+
+Hibernate therefore validates the database schema instead of creating or modifying tables automatically. Flyway is responsible for managing schema changes.
+
+## API Error Handling
+
+The template includes a global exception handler using `@RestControllerAdvice`.
+
+API errors follow a standard structure:
+
+```json
+{
+  "timestamp": "2026-09-19T12:00:00",
+  "status": 404,
+  "error": "Not Found",
+  "message": "Resource not found",
+  "path": "/api/example"
+}
+```
+
+This allows errors to have a consistent response format across the application.
+
+## Validation
+
+Spring Validation is available for request DTOs.
+
+Example:
+
+```java
+public record CreateUserRequest(
+
+    @NotBlank
+    String name,
+
+    @NotBlank
+    @Email
+    String email
+
+) {}
+```
+
+Validation errors are handled by the global exception handler.
+
+## Actuator
+
+Spring Boot Actuator is included for application monitoring.
+
+The default configuration exposes:
+
+```text
+/actuator/health
+/actuator/info
+```
+
+Health check:
+
+```text
+http://localhost:8080/actuator/health
+```
+
+## Development
+
+Spring Boot DevTools is included to improve the development experience.
+
+For local development, the application can be started with Maven:
+
+```bash
+./mvnw spring-boot:run
+```
+
+Or:
+
+```bash
+./mvnw clean package
+java -jar target/*.jar
+```
+
+## Tests
+
+Run the test suite with:
+
+```bash
+./mvnw test
+```
+
+## Building the Project
+
+Create a production JAR:
+
+```bash
+./mvnw clean package
+```
+
+The generated JAR will be available in:
+
+```text
+target/
+```
+
+## Docker Architecture
+
+The Dockerfile uses a multi-stage build:
+
+```text
+Maven Build
+     │
+     ▼
+Compile & Package
+     │
+     ▼
+Spring Boot JAR
+     │
+     ▼
+Runtime Image
+```
+
+Docker Compose provides:
+
+```text
+┌─────────────────────┐
+│   Spring Boot API   │
+│      :8080          │
+└──────────┬──────────┘
+           │
+           │
+┌──────────▼──────────┐
+│     PostgreSQL      │
+│       :5432         │
+└─────────────────────┘
+```
+
+## Getting Started
+
+To use this template for a new project:
+
+1. Clone or copy the repository.
+2. Change the project name and Java package.
+3. Configure the environment variables.
+4. Add your entities under `model`.
+5. Create repositories.
+6. Implement business logic under `service`.
+7. Create DTOs.
+8. Create controllers.
+9. Add database migrations under `db/migration`.
+10. Run the application with Docker Compose.
+
+## License
+
+This project is intended to be used as a starting point for new Spring Boot API projects.
