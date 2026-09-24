@@ -1,4 +1,4 @@
-package com.wille.template.User;
+package com.wille.medialibrary.core.user;
 
 import org.springframework.stereotype.Component;
 

@@ -1,4 +1,4 @@
-package com.wille.template.Auth;
+package com.wille.medialibrary.core.auth;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -9,11 +9,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.wille.template.Auth.Request.RegisterRequest;
-import com.wille.template.User.IUserRepository;
-import com.wille.template.User.UserDTO;
-import com.wille.template.User.UserMapper;
-import com.wille.template.User.UserModel;
+import com.wille.medialibrary.core.auth.request.RegisterRequest;
+import com.wille.medialibrary.core.user.IUserRepository;
+import com.wille.medialibrary.core.user.UserDTO;
+import com.wille.medialibrary.core.user.UserMapper;
+import com.wille.medialibrary.core.user.UserModel;
 
 import jakarta.validation.Valid;
 
@@ -40,10 +40,6 @@ public class RegisterController {
             @Valid @RequestBody RegisterRequest request
     ) {
         
-        System.out.println("ENTROU NO CONTROLLER");
-        System.out.println("Username: " + request.getUsername());
-        System.out.println("Email: " + request.getEmail());
-
         UserDTO dto = new UserDTO();
 
         dto.setUsername(request.getUsername());

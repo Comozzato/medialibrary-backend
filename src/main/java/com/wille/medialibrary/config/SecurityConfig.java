@@ -1,4 +1,4 @@
-package com.wille.template.config;
+package com.wille.medialibrary.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -19,6 +19,7 @@ public class SecurityConfig {
             .csrf(csrf -> csrf.disable())
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers(
+                    "/books/**",
                     "/auth/**",
                     "/actuator/health"
                 ).permitAll()
@@ -32,4 +33,6 @@ public class SecurityConfig {
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
+
+  
 }

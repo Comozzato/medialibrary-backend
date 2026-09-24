@@ -1,4 +1,4 @@
-package com.wille.template.User;
+package com.wille.medialibrary.core.user;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

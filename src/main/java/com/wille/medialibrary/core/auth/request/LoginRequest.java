@@ -1,10 +1,10 @@
-package com.wille.template.User;
+package com.wille.medialibrary.core.auth.request;
 
 import lombok.Data;
 
 @Data 
-public class UserDTO {
+public class LoginRequest {
     private String username;
     private String password;
-    private String email;
+
 }

@@ -12,6 +12,8 @@ services:
       DB_USERNAME: postgres
       DB_PASSWORD: postgres
       SERVER_PORT: 8080
+    volumes:
+      - media_storage:/app/storage
     depends_on:
       - db
 
@@ -29,3 +31,4 @@ services:
 
 volumes:
   postgres_data:
+  media_storage:

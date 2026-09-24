@@ -1,4 +1,4 @@
-package com.wille.template.exception;
+package com.wille.medialibrary.exception;
 
 import java.util.Map;
 

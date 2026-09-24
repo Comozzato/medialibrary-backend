@@ -1,4 +1,4 @@
-package com.wille.template.Auth.Request;
+package com.wille.medialibrary.core.auth.request;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;

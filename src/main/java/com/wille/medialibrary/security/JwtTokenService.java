@@ -1,4 +1,4 @@
-package com.wille.template.security;
+package com.wille.medialibrary.security;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
